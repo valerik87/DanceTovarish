@@ -52,7 +52,29 @@ public class PlayerController : NetworkBehaviour {
             MovementHorizontal = -Time.deltaTime * fVelocityHorizontal;
         }
 
+        //Points: Player and Mouse coord
+        Vector2 PlayerPosition = new Vector2(this.transform.position.x, this.transform.position.y);
+        Vector2 MousePointerPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        //Debug.Log("PlayerPosition: " + PlayerPosition);
+        //Debug.Log("MousePointerPosition: " + MousePointerPosition);
+
+        //Direction: PlayerUpDirection and PlayerMousePointerDirection 
+        Vector2 heading = MousePointerPosition - PlayerPosition;
+        Vector2 MousePointDirection = heading / heading.magnitude;
+        //Debug.Log("MousePointDirection: " + MousePointDirection);
+
+        Vector2 PlayerUpDirection = new Vector2(this.transform.up.x, this.transform.up.y);
+        //Debug.Log("PlayerUpDirection: " + PlayerUpDirection);
+
+        //Debug.DrawRay(this.transform.position, PlayerUpDirection, Color.green);
+        Debug.DrawRay(this.transform.position, MousePointDirection, Color.red);
+
+        float angle = Vector2.SignedAngle(PlayerUpDirection, MousePointDirection);
+        //Debug.Log("angle: " + angle);
+
+        transform.Rotate(0f,0f,angle);
         transform.Translate(MovementHorizontal, MovementVertical, 0f);
+
     }
 
     [Command]
